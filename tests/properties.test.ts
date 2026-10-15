@@ -88,3 +88,16 @@ describe("listing display helpers", () => {
     assert.equal(groupDigits(Number.NaN), "—");
   });
 });
+
+describe("empty listing results", () => {
+  it("returns an empty list when search criteria exclude all properties", () => {
+    assert.deepEqual(filterProperties(sampleProperties, { keyword: "no-such-listing-8a59d" }), []);
+    assert.deepEqual(filterProperties(sampleProperties, { priceMax: "1" }), []);
+    assert.deepEqual(filterProperties([], { location: "bangkok" }), []);
+  });
+
+  it("sorts empty results without introducing or mutating entries", () => {
+    assert.deepEqual(sortProperties([], "price-asc"), []);
+    assert.deepEqual(sortProperties([], "date-new"), []);
+  });
+});
