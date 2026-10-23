@@ -1,5 +1,8 @@
 name: CI
 
+# Shared CI (platform-ci-workflows): lint, typecheck, node --test suite, build, security scan.
+# Public repository -> GitHub-hosted runners (CI hosting policy).
+
 on:
   push:
     branches: [main]
@@ -14,19 +17,11 @@ permissions:
   contents: read
 
 jobs:
-  web-checks:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run lint -- --max-warnings=5
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
+  web:
+    uses: bookchaowalit/platform-ci-workflows/.github/workflows/ci-node.yml@87dc5e1c7e0416886a6371d5a101bb2ccba38edd # v1.1.1
+    with:
+      lint-command: npm run lint -- --max-warnings=5
+      require-tests: true
+      build-command: NEXT_TELEMETRY_DISABLED=1 npm run build
+  security:
+    uses: bookchaowalit/platform-ci-workflows/.github/workflows/security.yml@87dc5e1c7e0416886a6371d5a101bb2ccba38edd # v1.1.1
