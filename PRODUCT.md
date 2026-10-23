@@ -47,3 +47,17 @@ The homepage and listings routes are real Next.js surfaces with client-side sear
 ## Accessibility & Inclusion
 
 Use semantic landmarks and forms, visible focus, strong contrast, text equivalents for property imagery, reduced motion, and no search outcome that depends on color alone.
+
+## Status today (2026-10-23)
+
+- **What it is:** a bilingual (EN/TH) real-estate agency **demo** for Thailand on Next.js 15. It is not a creative-agency
+  booking platform with calendars, contracts or escrow; an older portfolio card said so and was corrected
+  (`portfolio-site-web` CARD-CLAIMS-REVIEW-2026-10).
+- **Works:** `/en` and `/th` home, listings search/filter/sort over 9 sample properties served by `/api/properties` from
+  `lib/sampleData.ts`, property cards, filesystem articles, agent profiles, EN/TH switch, invalid locales 404. 23 automated
+  tests (filters, sorting, articles, Sentry scrubbing) run on every push with the shared CI and security scan.
+- **Does not work (by design):** no real inventory, no CRM or lead handoff; the contact form sends nothing and says so
+  ("Demo form — nothing was sent"). No visitors, leads or revenue are claimed. No product analytics (KPI plan is draft; D4).
+- **Live:** https://agencyrenting.bookchaowalit.com (200), the CVE-patched build `2a46d4a` deployed by CLI on 2026-10-23
+  (D9a). Later commits on `main` (Sentry, shared CI) wait for a deploy: the Vercel project is linked to the old repository
+  name, so pushes do not deploy (owner action D9).
