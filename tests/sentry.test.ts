@@ -50,6 +50,23 @@ describe("scrubEvent", () => {
     assert.equal(JSON.stringify(event).includes("private"), false);
   });
 
+  it("strips query strings and hashes from URLs in messages, frames and debug images", () => {
+    const event = scrubEvent({
+      exception: {
+        values: [{
+          value: "Failed to fetch https://agencyrenting.bookchaowalit.com/api/properties?location=private (from /en/listings?q=private#frag)",
+          stacktrace: { frames: [{ filename: "https://agencyrenting.bookchaowalit.com/app.js?v=private", abs_path: "/en/listings?q=private" }] },
+        }],
+      },
+      debug_meta: { images: [{ code_file: "https://agencyrenting.bookchaowalit.com/chunk.js?private=1" }] },
+    });
+    const value = event.exception?.values?.[0];
+    assert.equal(value?.value, "Failed to fetch https://agencyrenting.bookchaowalit.com/api/properties (from /en/listings)");
+    assert.deepEqual(value?.stacktrace?.frames?.[0], { filename: "https://agencyrenting.bookchaowalit.com/app.js", abs_path: "/en/listings" });
+    assert.equal(event.debug_meta?.images?.[0]?.code_file, "https://agencyrenting.bookchaowalit.com/chunk.js");
+    assert.equal(JSON.stringify(event).includes("private"), false);
+  });
+
   it("removes local variables from every stack frame", () => {
     const event = scrubEvent({
       exception: {
