@@ -71,3 +71,9 @@ request data, user, breadcrumbs, extra, frame locals, the `nextjs` request path 
 | 4–5 | Dashboard and alerts | not set up |
 | 6 | Baselines captured | waived — dated action: capture 30 days after the PostHog key exists |
 | 7 | Consent | needed before PostHog goes live for EU/TH visitors (cookie-less mode or a banner) — owner decision |
+
+## Review (2026-10-24): changes requested
+
+Checker: independent Claude reviewer subagent (`solo:solo-reviewer`, Sonnet, read-only, no maker context). Status unchanged until fixed.
+
+- Gap: Intro says 9 sample properties but lib/sampleData.ts has 8 (ids 1-8); PRODUCT.md also says 9: overclaim.
