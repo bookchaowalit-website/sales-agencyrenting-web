@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { scrubEvent, sentryOptions } from "../lib/sentry.ts";
 
 // SPEC-001 AC-03/AC-04: Sentry reports errors only and never ships visitor data.

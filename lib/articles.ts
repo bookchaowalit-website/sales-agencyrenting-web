@@ -103,7 +103,7 @@ export function getArticleBySlug(slug: string): Article | null {
             excerpt,
             readTime,
         } as Article;
-    } catch (error) {
+    } catch {
         return null;
     }
 }

@@ -1,13 +1,10 @@
 # Agency Renting
 
-A bilingual (English/Thai) real-estate agency site: property listings with
-real client-side search and filtering (location, type, price range,
-bedrooms), an articles section, agent profiles, and a contact form.
-Properties come from a static in-memory sample dataset
-(`lib/sampleData.ts`); articles are real filesystem content — `.mdx` files
-under `content/articles/` parsed with `gray-matter` (frontmatter + raw
-markdown, not compiled/rendered MDX — see below). Both are served through
-small API routes rather than a real backend/CMS.
+A bilingual (English/Thai) design demo of a property desk for Thailand, on the shared
+**Reader shell** since 2026-11-19 (`app/reader-shell.css`, `components/reader-shell.tsx`, see
+`READER.md`). Listings come from a static sample dataset (`lib/sampleData.ts`); there is no
+brokerage, agent team, phone line or inbox behind it, and the pages say so. All page copy lives in
+`lib/copy.ts`; the views are server components in `components/agency-views.tsx`.
 
 Mobile companion: [bookchaowalit-agencyrenting-mobile](https://github.com/bookchaowalit-mobile/bookchaowalit-agencyrenting-mobile)
 Portfolio: [bookchaowalit.com](https://bookchaowalit.com)
@@ -17,11 +14,13 @@ Portfolio: [bookchaowalit.com](https://bookchaowalit.com)
 | Route | What it is |
 |---|---|
 | `/` | Redirects to `/en` |
-| `/[locale]` | Homepage (`en` or `th`; anything else 404s) |
-| `/[locale]/listings` | Property grid with live search/filter/sort, loaded from `/api/properties` |
-| `/[locale]/about`, `/[locale]/articles`, `/[locale]/contact` | Static content + agent profiles + contact form |
-| `/api/properties`, `/api/articles` | Serve the sample dataset as JSON |
-| `/more-projects` | Cross-links to sibling projects |
+| `/[locale]` | Home (`en` or `th`; anything else 404s): head and the featured sample listings |
+| `/[locale]/listings` | Every sample listing; GET search (`?q=`) and rent/sale chips (`?mode=`); old `?property=<id>` links redirect to the listing page |
+| `/[locale]/listings/[id]` | One listing: facts, photo, features, nearby places, previous/next |
+| `/[locale]/articles` | Guides: none published yet (the draft guide in `content/articles/` has unsourced figures) |
+| `/[locale]/about`, `/[locale]/contact` | What the demo is, and where to reach the project (bookchaowalit.com) |
+| `/api/properties`, `/api/articles`, `/api/health` | JSON routes |
+| `/more-projects` | 308 to https://bookchaowalit.com/ |
 
 ## What this pass found
 

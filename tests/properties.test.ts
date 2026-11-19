@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { compactText, filterProperties, parseFilterNumber, sampleProperties, sortProperties } from "../lib/sampleData.ts";
 import type { Property } from "../lib/sampleData.ts";
 

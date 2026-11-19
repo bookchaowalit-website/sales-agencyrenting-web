@@ -578,25 +578,3 @@ export const getFeaturedProperties = (limit: number = 6): Property[] => {
         .filter((property) => property.isFeatured)
         .slice(0, limit);
 };
-
-// Get properties by type
-export const getPropertiesByType = (
-    type: string,
-    limit?: number,
-): Property[] => {
-    const filtered = sampleProperties.filter(
-        (property) => property.property_type === type,
-    );
-    return limit ? filtered.slice(0, limit) : filtered;
-};
-
-// Get properties by price type
-export const getPropertiesByPriceType = (
-    priceType: "sale" | "rent",
-    limit?: number,
-): Property[] => {
-    const filtered = sampleProperties.filter(
-        (property) => property.price_type === priceType,
-    );
-    return limit ? filtered.slice(0, limit) : filtered;
-};

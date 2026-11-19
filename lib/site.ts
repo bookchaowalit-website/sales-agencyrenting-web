@@ -1,2 +1,2 @@
-/** Canonical origin for metadata, robots.txt and sitemap.xml. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://bookchaowalit-agencyrenting.vercel.app").replace(/\/$/, "");
+/** Canonical origin for metadata, robots.txt and sitemap.xml (the site's own domain). */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://agencyrenting.bookchaowalit.com").replace(/\/$/, "");

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { GET, dynamic } from "../app/api/health/route.ts";
 
 describe("GET /api/health", () => {

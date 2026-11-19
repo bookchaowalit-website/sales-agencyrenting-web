@@ -1,20 +1,14 @@
-# Agency Renting — design direction
+# Agency Renting — design
 
-<!-- impeccable:design-schema 1 -->
+Since 2026-11-19 every page uses the shared **Reader shell** (`app/reader-shell.css`,
+`components/reader-shell.tsx`, rules in `READER.md`), replacing the dark amber home page and the
+mismatched shadcn inner pages with one look: Geist plus self-hosted Noto Sans Thai, the `--rs-*`
+light/dark tokens, one top bar (with the language switch and the hub link) and one footer.
 
-## World
-
-The homepage is a late-night property desk rendered as a cracktro listing queue: an emissive black field, slow dust behind the work, and a single amber signal for action and price. Nothing is trapped in a generic card shell.
-
-## Direction contract
-
-- Seed: `9a371622`; assigned grounded candidate 5.
-- First viewport: a direct bilingual address thesis followed by the first sample inventory rows.
-- Form: baseline-led queue, image strip, index, property facts, and right-aligned next action.
-- Interaction: search and rent/sale signal filters update the queue; the listing route remains the handoff.
-- Material: void black, ash/ivory text, amber signal, restrained image saturation, drifting dust field.
-- Responsive rule: rows become a two-line stack at phone width while index and price remain visible.
-
-## Constraints kept honest
-
-The inventory is still the existing sample dataset. The contact submission remains a UI simulation and is labeled in the footer.
+- Home: page head with two actions, then the featured sample listings as rows.
+- Listings: GET search and rent/sale chips whose counts follow the search; a count line; rows; a
+  translated empty state with Clear filters.
+- Listing: back link, type and rent/sale tags, facts in the meta line, photo, description, features,
+  nearby places, a sample-data note and previous/next.
+- Guides, About, Contact: honest text; no team, office, phone, inbox or invented figures.
+- Floor: text ≥ 12px, targets ≥ 44px, 4.5:1 text in light and dark, forced colors, Thai line height 1.8.
