@@ -10,6 +10,8 @@ export interface ArticleMetadata {
     image: string;
     tags: string[];
     slug: string;
+    /** Only `published: true` in the front matter makes an article public; anything else is a draft. */
+    published: boolean;
 }
 
 export interface Article extends ArticleMetadata {
@@ -72,6 +74,7 @@ export function getAllArticles(): Article[] {
             author: data.author,
             image: data.image,
             tags: data.tags || [],
+            published: data.published === true,
             content,
             excerpt,
             readTime,
@@ -80,6 +83,14 @@ export function getAllArticles(): Article[] {
 
     // Sort articles by date (newest first)
     return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+/**
+ * The articles the public may read. The Guides page and GET /api/articles both use this list,
+ * so a draft hidden on the page is never served by the API either.
+ */
+export function getPublishedArticles(): Article[] {
+    return getAllArticles().filter((article) => article.published);
 }
 
 export function getArticleBySlug(slug: string): Article | null {
@@ -99,6 +110,7 @@ export function getArticleBySlug(slug: string): Article | null {
             author: data.author,
             image: data.image,
             tags: data.tags || [],
+            published: data.published === true,
             content,
             excerpt,
             readTime,

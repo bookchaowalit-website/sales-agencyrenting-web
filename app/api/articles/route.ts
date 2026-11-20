@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getAllArticles } from '@/lib/articles';
+import { getPublishedArticles } from '@/lib/articles';
 
 export async function GET() {
     try {
-        const articles = getAllArticles();
+        const articles = getPublishedArticles();
         return NextResponse.json(articles);
     } catch (error) {
         console.error('Error fetching articles:', error);

@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Bookchaowalit", url: "https://bookchaowalit.com" }],
   creator: "Bookchaowalit",
   icons: { icon: "/icon.svg" },
-  alternates: { canonical: "/en", languages: { en: "/en", th: "/th" } },
-  openGraph: { type: "website", url: "/en", siteName: "Agency Renting", title: "Agency Renting | Sample property desk", description: "A bilingual design demo of a property desk for Thailand, with sample listings." },
+  // Canonical, hreflang and og:url are set per page (lib/locale-page.ts pageMetadata), never here.
+  openGraph: { type: "website", siteName: "Agency Renting", title: "Agency Renting | Sample property desk", description: "A bilingual design demo of a property desk for Thailand, with sample listings." },
   robots: { index: true, follow: true },
 };
 

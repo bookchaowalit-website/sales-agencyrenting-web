@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ListingsView } from "@/components/agency-views";
 import { COPY, parseMode } from "@/lib/copy";
-import { readLocale } from "@/lib/locale-page";
+import { pageMetadata, readLocale } from "@/lib/locale-page";
 import { sampleProperties, sortProperties } from "@/lib/sampleData";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -10,7 +10,8 @@ const one = (value: string | string[] | undefined) => (Array.isArray(value) ? va
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await readLocale(params);
-  return { title: COPY[locale].listingsTitle, alternates: { canonical: `/${locale}/listings` } };
+  // The canonical drops ?q= and ?mode=: filtered views fold into the listings page.
+  return pageMetadata(locale, "/listings", COPY[locale].listingsTitle);
 }
 
 export default async function Listings({ params, searchParams }: Props) {

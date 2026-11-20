@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { GET as articles } from "@/app/api/articles/route";
 import { GET as properties } from "@/app/api/properties/route";
-import { getAllArticles, getAllTags, getArticleBySlug, getArticlesByTag } from "@/lib/articles";
+import { getAllArticles, getAllTags, getArticleBySlug, getArticlesByTag, getPublishedArticles } from "@/lib/articles";
 import { sampleProperties } from "@/lib/sampleData";
 
 describe("JSON routes", () => {
@@ -10,9 +10,11 @@ describe("JSON routes", () => {
     expect(await response.json()).toHaveLength(sampleProperties.length);
   });
 
-  it("serves the article files", async () => {
+  it("serves only published articles: the draft guide is not public", async () => {
+    expect(getAllArticles().every((article) => !article.published)).toBe(true);
     const response = await articles();
-    expect(Array.isArray(await response.json())).toBe(true);
+    expect(await response.json()).toEqual([]);
+    expect(getPublishedArticles()).toEqual([]);
   });
 });
 

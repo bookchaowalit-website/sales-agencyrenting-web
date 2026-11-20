@@ -134,7 +134,26 @@ export function typeLabel(type: string, locale: Locale): string {
   return COPY[locale].types[type] ?? type.replace(/^./, (letter) => letter.toUpperCase());
 }
 
-/** The words a search matches against: English data plus the Thai type name, so a Thai query finds "คอนโด". */
+/** Thai names for the places in the sample locations, so a Thai query such as "ภูเก็ต" finds the Phuket listing. */
+export const PLACES_TH: Record<string, string> = {
+  Bangkok: "กรุงเทพฯ กรุงเทพมหานคร",
+  Phuket: "ภูเก็ต",
+  Patong: "ป่าตอง",
+  "Chiang Mai": "เชียงใหม่",
+  Nimmanhaemin: "นิมมานเหมินท์",
+  "Hua Hin": "หัวหิน",
+  "Cha-am": "ชะอำ",
+  Pattaya: "พัทยา",
+  Jomtien: "จอมเทียน",
+  "Koh Samui": "เกาะสมุย",
+  "Surat Thani": "สุราษฎร์ธานี",
+  Sukhumvit: "สุขุมวิท",
+  Asoke: "อโศก",
+  "On Nut": "อ่อนนุช",
+};
+
+/** The words a search matches against: English data plus the Thai type and place names, so a Thai query finds "คอนโด" or "ภูเก็ต". */
 export function searchFields(property: Property): string[] {
-  return [property.title, property.location, property.property_type, COPY.th.types[property.property_type] ?? "", property.description];
+  const places = Object.entries(PLACES_TH).filter(([english]) => property.location.includes(english)).map(([, thai]) => thai);
+  return [property.title, property.location, ...places, property.property_type, COPY.th.types[property.property_type] ?? "", property.description];
 }

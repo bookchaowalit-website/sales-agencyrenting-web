@@ -6,7 +6,7 @@ const notFound = vi.fn(() => { throw new Error("NOT_FOUND"); });
 vi.mock("next/font/google", () => ({ Geist: () => ({ variable: "geist" }), Noto_Sans_Thai: () => ({ variable: "noto" }) }));
 vi.mock("next/navigation", () => ({ redirect: (url: string) => redirect(url), notFound: () => notFound() }));
 
-import Home from "@/app/[locale]/page";
+import Home, { generateMetadata as homeMeta } from "@/app/[locale]/page";
 import Listings, { generateMetadata as listingsMeta } from "@/app/[locale]/listings/page";
 import Listing, { generateMetadata as listingMeta, generateStaticParams } from "@/app/[locale]/listings/[id]/page";
 import Guides, { generateMetadata as guidesMeta } from "@/app/[locale]/articles/page";
@@ -129,6 +129,32 @@ describe("site frame", () => {
 
   it("sends /more-projects to the hub for good", async () => {
     expect(await nextConfig.redirects!()).toContainEqual({ source: "/more-projects", destination: "https://bookchaowalit.com/", permanent: true });
+  });
+});
+
+describe("per-page canonical and hreflang", () => {
+  it("points each page at itself, pairs the two languages and drops the filter query", async () => {
+    const th = await homeMeta({ params: params("th") });
+    expect(th.alternates?.canonical).toBe("/th");
+    expect(th.alternates?.languages).toEqual({ en: "/en", th: "/th", "x-default": "/en" });
+    expect(th.openGraph?.url).toBe("/th");
+    const listing = await listingMeta({ params: Promise.resolve({ locale: "en", id: "1" }) });
+    expect(listing.alternates?.canonical).toBe("/en/listings/1");
+    expect(listing.alternates?.languages).toEqual({ en: "/en/listings/1", th: "/th/listings/1", "x-default": "/en/listings/1" });
+    expect(listing.openGraph?.url).toBe("/en/listings/1");
+    const listings = await listingsMeta({ params: params("th"), searchParams: search({ q: "condo", mode: "rent" }) });
+    expect(listings.alternates?.canonical).toBe("/th/listings");
+    expect((await guidesMeta({ params: params("en") })).alternates?.canonical).toBe("/en/articles");
+    expect(metadata.alternates).toBeUndefined();
+    expect((metadata.openGraph as { url?: string }).url).toBeUndefined();
+  });
+});
+
+describe("Thai place search", () => {
+  it("finds listings by Thai city names", () => {
+    expect(filterListings(sampleProperties, "ภูเก็ต", "all").shown.map((p) => p.location)).toEqual(["Patong Beach, Phuket"]);
+    expect(filterListings(sampleProperties, "เชียงใหม่", "all").shown.map((p) => p.location)).toEqual(["Nimmanhaemin, Chiang Mai"]);
+    expect(filterListings(sampleProperties, "กรุงเทพฯ", "all").shown).toHaveLength(3);
   });
 });
 
