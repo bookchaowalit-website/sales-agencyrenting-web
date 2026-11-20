@@ -61,3 +61,13 @@ Use semantic landmarks and forms, visible focus, strong contrast, text equivalen
 - **Live:** https://agencyrenting.bookchaowalit.com (200), the CVE-patched build `2a46d4a` deployed by CLI on 2026-10-23
   (D9a). Later commits on `main` (Sentry, shared CI) wait for a deploy: the Vercel project is linked to the old repository
   name, so pushes do not deploy (owner action D9).
+
+## Known limits
+
+- Listings search: after editing the field, Clear / Clear filters change the URL and results but the field (an
+  uncontrolled `defaultValue`) can keep the edited text, and focus is not returned to it.
+- The language switch links to the other locale's plain page, so `/en/listings?q=phuket&mode=rent` → `/th/listings`
+  drops the search and mode.
+- The Guides page does not list articles yet: `/api/articles` serves only `published: true` articles, and there are none
+  today (`content/articles/bangkok-real-estate-guide.mdx` has a broken header, so it counts as a draft). Wire
+  GuidesView to `getPublishedArticles()` when the first guide is published.
