@@ -71,3 +71,4 @@ Use semantic landmarks and forms, visible focus, strong contrast, text equivalen
 - The Guides page does not list articles yet: `/api/articles` serves only `published: true` articles, and there are none
   today (`content/articles/bangkok-real-estate-guide.mdx` has a broken header, so it counts as a draft). Wire
   GuidesView to `getPublishedArticles()` when the first guide is published.
+- Price and bedroom filters are not carried by the search form or the Clear links, so a new search resets them.
