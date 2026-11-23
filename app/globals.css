@@ -2,7 +2,6 @@
 @import "./reader-shell.css";
 
 html, body { margin: 0; background: var(--rs-bg); }
-html { scroll-padding-top: 64px; }
 
 /* Geist for Latin text, then the self-hosted Noto Sans Thai for Thai, then system fonts. */
 :root { --rs-font: var(--font-geist-sans, -apple-system), var(--font-noto-thai, "Noto Sans Thai"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
