@@ -10,10 +10,12 @@ Last reviewed: 2026-11-28 · commit `1e9d9b3`
 flowchart TD
   V["ผู้เยี่ยมชมเปิด /"] --> ROOT["redirect ไป /en (next.config และ app/page.tsx)"]
   ROOT --> LOC{"segment locale เป็น en หรือ th?"}
+  V2["เปิด /th หรือ /en ตรง ๆ"] --> LOC
+  HOME -.->|"ลิงก์สลับภาษาใน header: path เดิมของอีกภาษา"| LOC
   LOC -->|ไม่ใช่| NF["readLocale: 404"]
-  LOC -->|ใช่| HOME["หน้าแรก: ทรัพย์เด่น 5 รายการจาก lib/sampleData.ts"]
+  LOC -->|ใช่| HOME["หน้าแรก: ทรัพย์เด่นไม่เกิน 5 รายการ (ข้อมูลตอนนี้มี isFeatured 3 รายการ) จาก lib/sampleData.ts"]
   HOME --> LIST["/locale/listings: GET ?q= (ตัดที่ 80 ตัว) และ ?mode= เช่า/ขาย, กรองฝั่ง server"]
-  LIST -->|"?property=id เดิม"| OLD["redirect ไปหน้า listing ของ id นั้น"]
+  LIST -->|"?property=id เดิม และ id มีในข้อมูล"| OLD["redirect ไปหน้า listing ของ id นั้น (id ที่ไม่มี: แสดงรายการตามปกติ ไม่ redirect)"]
   LIST --> DETAIL["/locale/listings/id: ข้อเท็จจริง รูป จุดเด่น สถานที่ใกล้เคียง + ก่อนหน้า/ถัดไป"]
   LIST -->|ไม่พบ| EMPTY["สถานะว่าง + ล้างตัวกรอง"]
   DETAIL -->|id ไม่มีในข้อมูล| NF2["dynamicParams=false: 404"]
@@ -23,8 +25,9 @@ flowchart TD
   API --> ART["getPublishedArticles อ่าน content/articles/*.mdx: ไฟล์เดียวที่มียังไม่มี front matter ที่ใช้ได้ จึงไม่ถูกเผยแพร่ [ต้องยืนยัน]"]
   V --> HEALTH["/api/health: status ok + commit ของ build"]
   V --> MORE["/more-projects"] --> RED["308 ไป bookchaowalit.com"]
-  HOME -.-> SENTRY["error เท่านั้นส่ง Sentry เมื่อมี NEXT_PUBLIC_SENTRY_DSN, scrubEvent ตัดข้อมูลส่วนบุคคล"]
-  CI["push/PR เข้า main: CI กลาง + security scan"] --> DEPLOY["Vercel Git deploy ของ main [ต้องยืนยัน] แล้ว scripts/deploy-smoke.sh ตรวจ 200 และ commit จาก /api/health"]
+  HOME -.-> SENTRY["error เท่านั้นส่ง Sentry เมื่อมี NEXT_PUBLIC_SENTRY_DSN, ใช้ทั้ง client และ server ของแอป; scrubEvent ลบ request/user/breadcrumbs/extra, ตัด query/fragment ใน URL และ path ในข้อความ error (ข้อมูลอื่นในข้อความ error ยังส่งได้)"]
+  CI["push/PR เข้า main: CI กลาง + security scan (ตรวจอย่างเดียว ไม่สั่ง deploy)"]
+  DEPLOY["push เข้า main: Vercel Git integration deploy [ต้องยืนยัน]"] --> SMOKE["deploy-smoke.yml รันเมื่อ deployment_status สำเร็จใน environment Production* (หรือสั่งมือ): ตรวจ 200 และ commit จาก /api/health"]
   DEPLOY --> V
 ```
 
@@ -50,7 +53,7 @@ Sources: `docs/UPGRADE-PLAN.md` (P0 บทความ .mdx และรูป�
 
 | ID | As-Is → To-Be | Status | Owner | Evidence |
 |---|---|---|---|---|
-| G1 | ไม่มีบทความเผยแพร่ ไฟล์ .mdx เดียวเสียรูป และหน้า Guides เป็นหน้าว่างตายตัว → แยกเป็น 3 บทความที่เผยแพร่ได้และให้หน้า Guides/`/api/articles` ใช้รูปข้อมูลเดียวกัน | decide | owner | `docs/UPGRADE-PLAN.md` P0 (ต้องให้ owner อนุมัติเนื้อหา); `content/articles/bangkok-real-estate-guide.mdx` |
+| G1 | ไม่มีบทความเผยแพร่ ไฟล์ .mdx เดียวเสียรูป และหน้า Guides เป็นหน้าว่างตายตัว → แยกเป็น 3 บทความที่เผยแพร่ได้ (ตั้ง `published: true` ได้เมื่อตัวเลขในร่างมีแหล่งอ้างอิงแล้ว เพราะ `/api/articles` เปิดเนื้อหาสาธารณะทันที) และให้หน้า Guides/`/api/articles` ใช้รูปข้อมูลเดียวกัน | decide | owner | `docs/UPGRADE-PLAN.md` P0 (ต้องให้ owner อนุมัติเนื้อหา); `content/articles/bangkok-real-estate-guide.mdx` |
 | G2 | หน้า Contact ไม่มีฟอร์ม มีแต่ลิงก์ไปเว็บหลัก → ฟอร์มที่ส่งต่อไปบริการรับฟอร์มจริง | decide | owner | `docs/UPGRADE-PLAN.md` P1 (รอ owner เลือกบริการ); `PRODUCT.md` ห้ามอ้างว่ามี handoff |
 
 ## Open questions
